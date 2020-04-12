@@ -51,12 +51,14 @@ export const App: React.FC<{}> = ({}) => {
   const [messages, setMessages] = useState<MessageType[]>([]);
   const testValue = { messages, setMessages };
 
-  const ws = useRef(new WebSocket(URL));
+  const ws = useRef<WebSocket | null>(null);
 
   const renderCount = useRef(0);
 
   const submitMessage = (msg: MessageType) => {
-    ws.current.send(JSON.stringify(msg));
+    if (ws.current) {
+      ws.current.send(JSON.stringify(msg));
+    }
 
     addMessage(msg);
   };
@@ -69,53 +71,33 @@ export const App: React.FC<{}> = ({}) => {
     // mhCtx.messages = [...mhCtx.messages, msg];
     // MessageHistoryContext.Provider([..mhCtx.messages, msg]);
     // setMessages([...mhCtx.messages, msg]);
-    setMessages([...messages, msg]);
+    // setMessages([...messages, msg]);
+
     // }
+    setMessages((prev) => {
+      return [...prev, msg];
+    });
   };
 
   // websocket onmessage
   useEffect(() => {
-    ws.current.onmessage = (msg) => {
+    ws.current = new WebSocket(URL);
+    ws.current.onmessage = (msg: MessageEvent) => {
       const message = JSON.parse(msg.data);
       message.isMe = false;
 
       addMessage(message);
     };
-
-    console.log(`hello`);
-  });
+  }, []);
 
   // close websocket
   useEffect(() => {
     return () => {
-      ws.current.close();
+      if (ws.current) {
+        ws.current.close();
+      }
     };
   }, [ws]);
-
-  // useEffect(() => {
-  //   ws.onopen = () => {
-  //     // on conneting, do nothing but log it to the console
-  //     console.log("connected");
-  //   };
-
-  //   ws.onmessage = (evt) => {
-  //     // on receving a message, add it to the list of messages
-  //     const message = JSON.parse(evt.data);
-
-  //     // console.log(`evt.data: ${JSON.stringify(evt.data)}`);
-  //     message.isMe = false;
-  //     addMessage(message);
-  //   };
-
-  //   return () => {
-  //     ws.onclose = () => {
-  //       console.log(`disconnected`); // debug
-
-  //       // TODO: automatically try to reconnect on connection loss
-  //       ws = new WebSocket(URL);
-  //     };
-  //   };
-  // }, []);
 
   return (
     <StylesProvider injectFirst>
