@@ -9,6 +9,7 @@ export type MessageType = {
   isRead: boolean;
   isMe: boolean;
   isSendSuccess: boolean;
+  uuid: string;
 };
 
 // const msgStyle = css({
@@ -45,6 +46,7 @@ export const Message: React.FC<MessageType> = ({
   isRead,
   isMe,
   isSendSuccess,
+  uuid,
 }: MessageType) => {
   const msgStyle = css({
     padding: "0 10px",
