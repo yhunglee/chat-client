@@ -69,6 +69,7 @@ export const MessageHistory: React.FC<MsgList> = ({ messages }) => {
             isRead={msg.isRead}
             isMe={msg.isMe}
             isSendSuccess={msg.isSendSuccess}
+            uuid={msg.uuid}
             css={messageStyle}
           />
         );
