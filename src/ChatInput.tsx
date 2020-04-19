@@ -17,6 +17,7 @@ import {
 import CheckIcon from "@material-ui/icons/Check";
 import { MessageType } from "./Message";
 import PropTypes from "prop-types";
+import { v4 as uuidv4 } from "uuid";
 
 const boxStyle = css({
   bottom: "0%",
@@ -70,6 +71,7 @@ export const ChatInput: React.FC<ChatAction> = ({ submitFC }) => {
         isRead: false,
         isMe: true,
         isSendSuccess: false,
+        uuid: uuidv4(),
       };
       submitFC(composedMsg);
     }
@@ -92,6 +94,7 @@ export const ChatInput: React.FC<ChatAction> = ({ submitFC }) => {
       isRead: false,
       isMe: true,
       isSendSuccess: false,
+      uuid: uuidv4(),
     };
     submitFC(composedMsg);
 
