@@ -20,6 +20,7 @@ import React, {
   useCallback,
 } from "react";
 import { MessageType } from "./Message";
+import { v4 as uuidv4 } from "uuid";
 
 const appStyle = css({
   height: "100vh",
@@ -57,6 +58,7 @@ export const App: React.FC<{}> = ({}) => {
 
   const submitMessage = (msg: MessageType) => {
     if (ws.current) {
+      msg.uuid = uuidv4(); // 設定訊息的唯一識別碼
       ws.current.send(JSON.stringify(msg));
     }
 
@@ -79,14 +81,40 @@ export const App: React.FC<{}> = ({}) => {
     });
   };
 
+  const updateMessage = (msg: MessageType) => {
+    setMessages((prev) => {
+      const matchedMsg = prev.find((element) => {
+        return element.uuid === msg.uuid;
+      });
+      const matchedIndex = prev.findIndex(
+        (element) => element.uuid === msg.uuid
+      );
+      if (matchedMsg && matchedIndex > -1) {
+        prev.splice(matchedIndex, 1, {
+          ...matchedMsg,
+          isSendSuccess: msg.isSendSuccess,
+        }); // 標記本機端傳送的訊息已經是成功傳送
+        return [...prev];
+      } else {
+        return [...prev];
+      }
+    });
+  };
+
   // websocket onmessage
   useEffect(() => {
     ws.current = new WebSocket(URL);
     ws.current.onmessage = (msg: MessageEvent) => {
       const message = JSON.parse(msg.data);
-      message.isMe = false;
 
-      addMessage(message);
+      if (message.isSendSuccess === false) {
+        message.isMe = false;
+        message.isSendSuccess = true; // 已成功收到遠端傳來的訊息, 修改本機端的遠端訊息樣式
+
+        addMessage(message);
+      } else {
+        updateMessage(message);
+      }
     };
   }, []);
 
