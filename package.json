@@ -16,8 +16,9 @@
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-scripts": "3.4.0",
+    "typeface-roboto": "0.0.75",
     "typescript": "~3.7.2",
-    "typeface-roboto": "0.0.75"
+    "uuid": "7.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -41,6 +42,7 @@
     ]
   },
   "devDependencies": {
-    "@types/react": "^16.9.23"
+    "@types/react": "^16.9.23",
+    "@types/uuid": "7.0.2"
   }
 }
