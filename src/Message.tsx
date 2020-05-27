@@ -97,7 +97,19 @@ export const Message: React.FC<MessageType> = ({
       <div className="msg-content">{content}</div>
       <Box flexDirection="column" flexWrap="wrap">
         <div className="msg-read-status">{isRead && isMe ? `已讀` : ``}</div>
-        <div className="msg-sent-time">{isSendSuccess ? sentAt : "x"}</div>
+        <div className="msg-sent-time">
+          {isSendSuccess
+            ? Intl.DateTimeFormat("lt-LT", {
+                timeZone: "Asia/Taipei",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              }).format(new Date(sentAt))
+            : "x"}
+        </div>
       </Box>
     </Box>
   );
