@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { Box, Container } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 import { jsx, css } from "@emotion/core";
 export type MessageType = {
   name: string;

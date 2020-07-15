@@ -12,24 +12,12 @@ import {
 import { MessageHistory } from "./MessageHistory";
 import MenuIcon from "@material-ui/icons/Menu";
 import "typeface-roboto";
-import React, {
-  useEffect,
-  useContext,
-  useState,
-  useRef,
-  useCallback,
-} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { MessageType } from "./Message";
 import { v4 as uuidv4 } from "uuid";
 
 const appStyle = css({
   height: "100vh",
-});
-
-const titleStyle = css({
-  color: "red ",
-  backgroundColor: "brown ",
-  margin: "0 30px ",
 });
 
 const URL = "ws://localhost:3030";
@@ -44,13 +32,13 @@ export const MessageHistoryContext = React.createContext<MessagesProps>({
   setMessages: () => {},
 });
 
-export const App: React.FC<{}> = ({}) => {
+export const App: React.FC<{}> = () => {
   // const ws = new WebSocket(URL);
 
   // const mhCtx = useContext(MessageHistoryContext);
   // const { setMessages } = mhCtx;
   const [messages, setMessages] = useState<MessageType[]>([]);
-  const testValue = { messages, setMessages };
+  // const testValue = { messages, setMessages };
 
   const ws = useRef<WebSocket | null>(null);
 

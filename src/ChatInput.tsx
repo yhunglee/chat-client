@@ -7,16 +7,8 @@ import {
   Checkbox,
 } from "@material-ui/core";
 import { css, jsx } from "@emotion/core";
-import {
-  FormEvent,
-  useState,
-  ChangeEvent,
-  KeyboardEventHandler,
-  useRef,
-} from "react";
-import CheckIcon from "@material-ui/icons/Check";
+import { FormEvent, useState, ChangeEvent, useRef } from "react";
 import { MessageType } from "./Message";
-import PropTypes from "prop-types";
 import { v4 as uuidv4 } from "uuid";
 
 const boxStyle = css({

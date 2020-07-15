@@ -2,8 +2,6 @@
 import { css, jsx } from "@emotion/core";
 import { Box } from "@material-ui/core";
 import { MessageType, Message } from "./Message";
-import { useContext } from "react";
-import { MessageHistoryContext } from "./App";
 // import Message from "./Message";
 
 const boxStyle = css({
@@ -19,34 +17,6 @@ const boxStyle = css({
 });
 
 const messageStyle = (messageType: MessageType) => css({});
-const exampleMsg = {
-  name: "Jack",
-  content: "hello",
-  sentAt: "2020-03-24 18:00",
-  readAt: "2020-03-24 18:01",
-  isRead: true,
-  isMe: false,
-  isSendSuccess: true,
-};
-const exampleMsg1 = {
-  name: "Apple",
-  content: "Nice to meet you",
-  sentAt: "2020-03-24 18:01",
-  readAt: "2020-03-24 18:01",
-  isRead: true,
-  isMe: true,
-  isSendSuccess: true,
-};
-
-const exampleMsg2 = {
-  name: "Jack",
-  content: "Me too",
-  sentAt: "2020-03-24 18:02",
-  readAt: "2020-03-24 18:03",
-  isRead: false,
-  isMe: false,
-  isSendSuccess: true,
-};
 
 type MsgList = {
   messages: MessageType[];
