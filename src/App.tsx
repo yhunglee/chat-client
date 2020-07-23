@@ -15,6 +15,7 @@ import "typeface-roboto";
 import React, { useEffect, useState, useRef } from "react";
 import { MessageType } from "./Message";
 import { v4 as uuidv4 } from "uuid";
+import { SideDrawer } from "./Drawer";
 
 const appStyle = css({
   height: "100vh",
@@ -89,6 +90,9 @@ export const App: React.FC<{}> = () => {
     });
   };
 
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleDrawer = () => setIsOpen((prevState) => !prevState);
+
   // websocket onmessage
   useEffect(() => {
     ws.current = new WebSocket(URL);
@@ -123,8 +127,14 @@ export const App: React.FC<{}> = () => {
           {console.log(`renderCount: ${(renderCount.current += 1)}`)}
           {/* debug */}
           <Toolbar>
-            <IconButton edge="start" color="inherit" aria-label="menu">
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              onClick={toggleDrawer}
+            >
               <MenuIcon />
+              <SideDrawer isOpen={isOpen} onClose={toggleDrawer} />
             </IconButton>
             <Typography variant="h6">聊天室</Typography>
             {/* <IconButton color="inherit" aria-label="font-large">
