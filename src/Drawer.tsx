@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+import { jsx } from "@emotion/core";
 import {
   Drawer,
   List,
@@ -14,14 +14,14 @@ import FormatListNumberedIcon from "@material-ui/icons/FormatListNumbered";
 import DynamicFeedIcon from "@material-ui/icons/DynamicFeed";
 import React from "react";
 
-export const SideDrawer: React.FC<{ isOpen: boolean; onClose: Function }> = ({
+export const SideDrawer: React.FC<{ isOpen: boolean; onClick: Function }> = ({
   isOpen,
-  onClose,
+  onClick,
 }) => {
   return (
     <Drawer open={isOpen}>
       <List>
-        <ListItem button key="0">
+        <ListItem button key="0" onClick={() => onClick()}>
           <ListItemIcon>
             <AccountBoxIcon></AccountBoxIcon>
           </ListItemIcon>
