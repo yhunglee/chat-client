@@ -8,11 +8,18 @@ import {
   Toolbar,
   IconButton,
   Typography,
+  Dialog,
+  DialogActions,
+  Button,
+  TextField,
+  DialogContent,
+  DialogTitle,
+  MenuItem,
 } from "@material-ui/core";
 import { MessageHistory } from "./MessageHistory";
 import MenuIcon from "@material-ui/icons/Menu";
 import "typeface-roboto";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, ChangeEvent } from "react";
 import { MessageType } from "./Message";
 import { v4 as uuidv4 } from "uuid";
 import { SideDrawer } from "./Drawer";
@@ -93,6 +100,83 @@ export const App: React.FC<{}> = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleDrawer = () => setIsOpen((prevState) => !prevState);
 
+  const [modalIsOpen, setModalOpen] = useState(false);
+  const toggleDialog = () =>
+    setModalOpen((prevState) => {
+      return !prevState;
+    });
+
+  const colorOptions = [
+    {
+      value: "#f44336",
+      label: "red",
+    },
+    {
+      value: "#e91e63",
+      label: "pink",
+    },
+    {
+      value: "#9c2730",
+      label: "purple",
+    },
+    {
+      value: "#673ab7",
+      label: "deepPurple",
+    },
+    {
+      value: "#3f51b5",
+      label: "indigo",
+    },
+    {
+      value: "#2196f3",
+      label: "blue",
+    },
+    {
+      value: "#03a9f4",
+      label: "lightBlue",
+    },
+    {
+      value: "#00bcd4",
+      label: "cyan",
+    },
+    {
+      value: "#009688",
+      label: "teal",
+    },
+    {
+      value: "#4caf50",
+      label: "green",
+    },
+    {
+      value: "#8bc34a",
+      label: "lightGreen",
+    },
+    {
+      value: "#cddc39",
+      label: "lime",
+    },
+    {
+      value: "#ffeb3b",
+      label: "yellow",
+    },
+    {
+      value: "#ffc107",
+      label: "amber",
+    },
+    {
+      value: "#ff9800",
+      label: "orange",
+    },
+    {
+      value: "#ff5722",
+      label: "deepOrange",
+    },
+  ];
+  const [selectedColor, setColor] = useState("#ff5722");
+  const handleChangeColor = (event: ChangeEvent<HTMLInputElement>) => {
+    setColor(event.target.value);
+  };
+
   // websocket onmessage
   useEffect(() => {
     ws.current = new WebSocket(URL);
@@ -134,7 +218,7 @@ export const App: React.FC<{}> = () => {
               onClick={toggleDrawer}
             >
               <MenuIcon />
-              <SideDrawer isOpen={isOpen} onClose={toggleDrawer} />
+              <SideDrawer isOpen={isOpen} onClick={toggleDialog} />
             </IconButton>
             <Typography variant="h6">聊天室</Typography>
             {/* <IconButton color="inherit" aria-label="font-large">
@@ -145,6 +229,43 @@ export const App: React.FC<{}> = () => {
 
         <MessageHistory messages={messages} />
         <ChatInput submitFC={submitMessage} />
+        <Dialog
+          open={modalIsOpen}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">個人資料設定</DialogTitle>
+          <DialogContent>
+            <form className="profile">
+              <TextField label="暱稱" variant="outlined" required />
+              {/* TODO: need to add error and helperText to nickname field */}
+
+              {/*  color picker */}
+
+              <TextField
+                select
+                variant="outlined"
+                onChange={handleChangeColor}
+                value={selectedColor}
+                css={{ backgroundColor: selectedColor }}
+              >
+                {colorOptions.map((color) => (
+                  <MenuItem
+                    value={color.value}
+                    key={color.value}
+                    css={{ backgroundColor: color.value }}
+                  >
+                    {color.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+
+              <DialogActions>
+                <Button onClick={() => setModalOpen(false)}>儲存</Button>
+              </DialogActions>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
       {/* </MessageHistoryContext.Provider> */}
     </StylesProvider>
