@@ -177,6 +177,50 @@ export const App: React.FC<{}> = () => {
     setColor(event.target.value);
   };
 
+  const [nickName, setNickname] = useState({
+    name: "",
+    id: "",
+  });
+
+  const saveProfile = (srcNickname: string = "", srcColor: string = "") => {
+    setNickname((prevState) => {
+      if (prevState.id !== "") {
+        localStorage.setItem(
+          "profile",
+          JSON.stringify({
+            ...prevState,
+            name: srcNickname,
+          })
+        );
+        return {
+          ...prevState,
+          name: srcNickname,
+        };
+      } else {
+        localStorage.setItem(
+          "profile",
+          JSON.stringify({
+            name: srcNickname,
+            id: uuidv4(),
+          })
+        );
+        return {
+          name: srcNickname,
+          id: uuidv4(),
+        };
+      }
+    });
+
+    localStorage.setItem("preferColor", selectedColor);
+  };
+
+  const onChangeNickname = (event: ChangeEvent<HTMLInputElement>) => {
+    event.persist();
+    setNickname((prev) => {
+      return { ...prev, name: event.target.value };
+    });
+  };
+
   // websocket onmessage
   useEffect(() => {
     ws.current = new WebSocket(URL);
@@ -233,11 +277,21 @@ export const App: React.FC<{}> = () => {
           open={modalIsOpen}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
+          disableBackdropClick={nickName.name.length < 3}
+          disableEscapeKeyDown={nickName.name.length < 3}
         >
           <DialogTitle id="alert-dialog-title">個人資料設定</DialogTitle>
           <DialogContent>
             <form className="profile">
-              <TextField label="暱稱" variant="outlined" required />
+              <TextField
+                label="暱稱"
+                variant="outlined"
+                required
+                value={nickName.name}
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                  onChangeNickname(event);
+                }}
+              />
               {/* TODO: need to add error and helperText to nickname field */}
 
               {/*  color picker */}
@@ -261,7 +315,15 @@ export const App: React.FC<{}> = () => {
               </TextField>
 
               <DialogActions>
-                <Button onClick={() => setModalOpen(false)}>儲存</Button>
+                <Button
+                  onClick={() => {
+                    setModalOpen(false);
+                    saveProfile(nickName.name, selectedColor);
+                  }}
+                  disabled={nickName.name.length < 3}
+                >
+                  儲存
+                </Button>
               </DialogActions>
             </form>
           </DialogContent>
